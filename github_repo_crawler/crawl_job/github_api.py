@@ -1,5 +1,15 @@
 import urllib, json
 
+import boto3
+
+SQS_QUEUE_NAME = "awseb-e-2dgvfbqfp2-stack-AWSEBWorkerQueue-1I5HY1F2PDO1R"
+
+def crawl_data_by_username(username):
+    work_queue = boto3.resource('sqs', region_name='us-west- 2').get_queue_by_name(QueueName=SQS_QUEUE_NAME)
+    username = "yehaolan"
+    work_queue.send_message(MessageBody=json.dumps({"username": username}))
+    
+
 def extract_data(username):
     githubURL = "https://api.github.com/users/{0}/repos".format(username)
     response = urllib.urlopen(githubURL)
@@ -35,5 +45,4 @@ def parse_repo_data(repo):
     return result
 
 if __name__ == "__main__":
-    print json.dumps(extract_data("yehaolan"), indent=2)
-    
+    print json.dumps(extract_data("yehaolan"), indent=2)   
