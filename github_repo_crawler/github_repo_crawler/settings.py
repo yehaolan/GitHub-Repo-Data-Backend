@@ -25,8 +25,10 @@ SECRET_KEY = 'm8&-d53r&odl=x8bc+w6vh%py+0z(y@&og=!lcvr3dje)(!*7@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-        u'ec2-35-162-251-5.us-west-2.compute.amazonaws.com']
+ALLOWED_HOSTS = [u'ec2-34-210-61-62.us-west-2.compute.amazonaws.com',
+                u'ec2-35-162-251-5.us-west-2.compute.amazonaws.com',
+                u'crawler.tt9j2pbpbg.us-west-2.elasticbeanstalk.com',                
+                u'localhost']
 
 
 # Application definition

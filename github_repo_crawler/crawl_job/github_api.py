@@ -2,22 +2,29 @@ import urllib, json
 
 import boto3
 
-SQS_QUEUE_NAME = "awseb-e-2dgvfbqfp2-stack-AWSEBWorkerQueue-1I5HY1F2PDO1R"
-
-def crawl_data_by_username(username):
-    work_queue = boto3.resource('sqs', region_name='us-west- 2').get_queue_by_name(QueueName=SQS_QUEUE_NAME)
-    username = "yehaolan"
-    work_queue.send_message(MessageBody=json.dumps({"username": username}))
-    
+from db_accessor import *
 
 def extract_data(username):
+    # check whether search this user 2 min ago
+    if visited_in_two_min(username):
+        res = {}
+        # message: 1  means visited in two min ago
+        res["message"] = 1
+        return res 
+
     githubURL = "https://api.github.com/users/{0}/repos".format(username)
     response = urllib.urlopen(githubURL)
     raw_data = json.loads(response.read())
  
     # when user not found
     if type(raw_data) is dict:
+        # print type(raw_data)
+        # message: 0  means visited in two min ago
+        raw_data["message"] = 0
+        # print raw_data
         return raw_data
+
+    
     # data for each user
     data = {}
     # set username
@@ -33,6 +40,11 @@ def extract_data(username):
         repos_data += [parse_repo_data(repo)]
 
     data["repos_data"] = repos_data
+    # message: 2  means visited in two min ago
+    data["message"] = 2
+
+    # add to db
+    add_user_time_to_db(username)
 
     return data
 
@@ -45,4 +57,5 @@ def parse_repo_data(repo):
     return result
 
 if __name__ == "__main__":
-    print json.dumps(extract_data("yehaolan"), indent=2)   
+    print json.dumps(extract_data("yehaolan"), indent=2)
+    
