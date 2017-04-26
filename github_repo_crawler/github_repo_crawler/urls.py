@@ -16,5 +16,5 @@ Including another URLconf
 from django.conf.urls import url, include
 
 urlpatterns = [
-    url(r'crawl_job', include(r'crawl_job.urls'))
+    url(r'crawl', include(r'crawl_job.urls'))
 ]

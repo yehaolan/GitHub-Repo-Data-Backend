@@ -1,7 +1,7 @@
-from django.conf.urls import url 
+from django.conf.urls import url
 
 from . import views
 
-urlpatterns = [ 
-    url(r'^', views.add_crawl_point, name="add_crawl_point")
+urlpatterns = [
+    url(r'^', views.crawl, name="crawl")
 ]
